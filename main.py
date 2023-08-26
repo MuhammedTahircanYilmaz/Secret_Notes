@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 
 def encode_text(text, key):
@@ -30,11 +31,11 @@ def decode_text(text, key):
 
 def encrypt_button_pressed():
     if len(title_entry.get()) == 0:
-        error_message.config(text="Please enter the title")
+        messagebox.showwarning(title="error", message="Please enter the title")
     elif len(secret_text.get("1.0", END).strip()) == 0:
-        error_message.config(text="Please enter the text to be encrypted")
+        messagebox.showwarning(title="error", message="Please enter the text to be encrypted")
     elif len(master_key_entry.get()) == 0:
-        error_message.config(text="Please enter the Master Key")
+        messagebox.showwarning(title="error", message="Please enter the Master Key")
     else:
         text = secret_text.get("1.0", "end-1c")
         key = master_key_entry.get()
@@ -44,16 +45,19 @@ def encrypt_button_pressed():
         with open("SecretNotes.txt", mode="a") as myNewFile:
             myNewFile.write(secret_title + '\n')
             myNewFile.write(encrypted_text + '\n')
+        title_entry.delete(0, END)
+        secret_text.delete("1.0", END)
+        master_key_entry.delete(0, END)
 
 
 def decrypt_button_pressed():
 
     if len(secret_text.get("1.0", END).strip()) == 0:
-        error_message.config(text="Please enter the text to be decrypted")
+        messagebox.showwarning(title="error", message="Please enter the text to be decrypted")
     elif len(master_key_entry.get()) == 0:
-        error_message.config(text="Please enter the Master Key")
+        messagebox.showwarning(title="error", message="Please enter the Master Key")
     elif not is_hexadecimal(secret_text.get("1.0", "end-1c")):
-        error_message.config(text="please enter the encrypted text correctly")
+        messagebox.showwarning(title="error", message="please enter the encrypted text correctly")
     else:
         text = secret_text.get("1.0", "end-1c").strip()
         key = master_key_entry.get()
@@ -106,9 +110,5 @@ if __name__ == '__main__':
     # Decryption
     decryption_button = Button(window, text="Decrypt", pady=5, command=decrypt_button_pressed)
     decryption_button.pack()
-
-    # Error Message
-    error_message = Label(window,)
-    error_message.pack()
 
     window.mainloop()
